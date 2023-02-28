@@ -134,4 +134,19 @@ unsafe fn advance(nodies: *mut body) {
 
     static mut position_Deltas: [Align16; 3] = [Align16([0.0; ROUNDED_INTERACTIONS_COUNT]); 3];
     static mut magnitudes: Align16 = Align16([0.0; ROUNDED_INTERACTIONS_COUNT]);
+
+    // Calculate the position_Deltas between the bodies for each interaction.
+
+    {
+        let mut k = 0;
+        for i in 0..BODIES_COUNT - 1 {
+            for j in i + 1..BODIES_COUNT {
+                for m in 0..3 {
+                    position_Deltas[m].0[k] =
+                        (*bodies.add(i)).position[m] - (*bodies.add(j)).position[m];
+                }
+                k += 1;
+            }
+        }
+    }
 }
